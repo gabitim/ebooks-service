@@ -8,11 +8,12 @@ import java.util.Objects;
  */
 
 @Entity
+@Table(name = "books")
 public class Book {
     @Id
-    @SequenceGenerator(name="BOOK_SEQ", sequenceName="BOOK_SEQ", allocationSize=1)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="BOOK_SEQ")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     Long ISBN;
+    @Column(unique = true)
     private String Titlu;
     private String Editura;
     private int An_publicare;
