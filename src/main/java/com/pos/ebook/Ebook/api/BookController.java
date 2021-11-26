@@ -19,17 +19,17 @@ public class BookController {
     BookService bookService;
 
     @GetMapping
-    List<Book> viewHomePage() {
-        return bookService.getAllBooksForFrontPage();
+    List<Book> getBooks() {
+        return bookService.getBooks();
     }
 
     @GetMapping("/{id}")
-    Book showOneBook(@PathVariable Long id) {
+    Book getBookById(@PathVariable Long id) {
         return bookService.getBookById(id);
     }
 
     @PostMapping
-    Book insertBook(@RequestBody Book book) {
+    Book addBook(@RequestBody Book book) {
         return bookService.addBook(book);
     }
 
