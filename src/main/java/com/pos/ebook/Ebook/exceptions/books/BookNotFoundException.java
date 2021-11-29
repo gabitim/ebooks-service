@@ -1,11 +1,11 @@
-package com.pos.ebook.Ebook.exceptions;
+package com.pos.ebook.Ebook.exceptions.books;
 
 /**
  * @author Timofti Gabriel
  */
 public class BookNotFoundException extends RuntimeException{
 
-    public BookNotFoundException(Long id) {
+    public BookNotFoundException(String id) {
         super("Could not find book " + id);
     }
 }

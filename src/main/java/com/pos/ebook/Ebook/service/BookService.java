@@ -1,6 +1,6 @@
 package com.pos.ebook.Ebook.service;
 
-import com.pos.ebook.Ebook.exceptions.BookNotFoundException;
+import com.pos.ebook.Ebook.exceptions.books.BookNotFoundException;
 import com.pos.ebook.Ebook.model.Book;
 import com.pos.ebook.Ebook.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public Book getBookById(Long id) {
+    public Book getBookById(String id) {
         return bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
     }
@@ -34,7 +34,7 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public Book replaceBook(Book book, Long id) {
+    public Book replaceBook(Book book, String id) {
         return bookRepository.findById(id)
                 .map(oldBook -> {
                     oldBook.setTitlu(book.getTitlu());
@@ -50,7 +50,7 @@ public class BookService {
                 });
     }
 
-    public void deleteBook(Long id) {
+    public void deleteBook(String id) {
         bookRepository.deleteById(id);
     }
 }

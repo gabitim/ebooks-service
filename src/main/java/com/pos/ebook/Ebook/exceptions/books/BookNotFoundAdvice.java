@@ -1,4 +1,4 @@
-package com.pos.ebook.Ebook.exceptions;
+package com.pos.ebook.Ebook.exceptions.books;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

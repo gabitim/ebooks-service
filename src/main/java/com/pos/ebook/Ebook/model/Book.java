@@ -11,8 +11,7 @@ import java.util.Objects;
 @Table(name = "books")
 public class Book {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    Long ISBN;
+    String ISBN;
     @Column(unique = true)
     private String Titlu;
     private String Editura;
@@ -22,18 +21,19 @@ public class Book {
     public Book() {
     }
 
-    public Book(String Titlu, String Editura, int An_publicare, String Gen_literar ) {
+    public Book(String ISBN, String Titlu, String Editura, int An_publicare, String Gen_literar ) {
+        this.ISBN = ISBN;
         this.Titlu = Titlu;
         this.Editura = Editura;
         this.An_publicare = An_publicare;
         this.Gen_literar = Gen_literar;
     }
 
-    public Long getISBN() {
+    public String getISBN() {
         return ISBN;
     }
 
-    public void setISBN(Long ISBN) {
+    public void setISBN(String ISBN) {
         this.ISBN = ISBN;
     }
 
