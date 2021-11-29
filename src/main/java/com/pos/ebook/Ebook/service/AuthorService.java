@@ -1,10 +1,12 @@
 package com.pos.ebook.Ebook.service;
 
-import com.pos.ebook.Ebook.exceptions.generic.NotFoundException;
+import com.pos.ebook.Ebook.exceptions.notFound.NotFoundException;
 import com.pos.ebook.Ebook.model.Author;
 import com.pos.ebook.Ebook.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,17 +38,17 @@ public class AuthorService {
         return authorRepository.save(author);
     }
 
-    public Author replaceAuthor(Author author, Long id) {
+    public ResponseEntity<Author> replaceAuthor(Author author, Long id) {
         return authorRepository.findById(id)
                 .map(oldAuthor -> {
                     oldAuthor.setNume(author.getNume());
                     oldAuthor.setPrenume(author.getPrenume());
 
-                    return authorRepository.save(oldAuthor);
+                    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(authorRepository.save(oldAuthor));
                 })
                 .orElseGet(() -> {
                     author.setID(id);
-                    return authorRepository.save(author);
+                    return ResponseEntity.status(HttpStatus.CREATED).body(authorRepository.save(author));
                 });
     }
 

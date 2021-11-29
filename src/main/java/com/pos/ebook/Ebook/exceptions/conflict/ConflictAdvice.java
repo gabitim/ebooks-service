@@ -1,4 +1,4 @@
-package com.pos.ebook.Ebook.exceptions.generic;
+package com.pos.ebook.Ebook.exceptions.conflict;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 
 @ControllerAdvice
-public class NotFoundAdvice {
+public class ConflictAdvice {
 
     @ResponseBody
-    @ExceptionHandler(NotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    String notFoundHandler(NotFoundException ex) {
+    @ExceptionHandler(ConflictException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    String conflictHandler(ConflictException ex) {
         return ex.getMessage();
     }
 }

@@ -4,6 +4,7 @@ import com.pos.ebook.Ebook.model.Author;
 import com.pos.ebook.Ebook.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,12 +31,13 @@ public class AuthorController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     Author addAuthor(@RequestBody Author author) {
         return authorService.addAuthor(author);
     }
 
     @PutMapping("/{id}")
-    Author replaceAuthor(@RequestBody Author author, @PathVariable Long id) {
+    ResponseEntity<Author> replaceAuthor(@RequestBody Author author, @PathVariable Long id) {
         return authorService.replaceAuthor(author, id);
     }
 

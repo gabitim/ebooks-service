@@ -4,6 +4,7 @@ import com.pos.ebook.Ebook.model.Book;
 import com.pos.ebook.Ebook.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,12 +31,12 @@ public class BookController {
     }
 
     @PostMapping
-    Book addBook(@RequestBody Book book) {
+    ResponseEntity<Book> addBook(@RequestBody Book book) {
         return bookService.addBook(book);
     }
 
     @PutMapping("/{id}")
-    Book replaceBook(@RequestBody Book book, @PathVariable String id) {
+    ResponseEntity<Book> replaceBook(@RequestBody Book book, @PathVariable String id) {
         return bookService.replaceBook(book, id);
     }
 

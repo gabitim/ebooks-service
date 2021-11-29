@@ -1,4 +1,4 @@
-package com.pos.ebook.Ebook.exceptions.generic;
+package com.pos.ebook.Ebook.exceptions.notFound;
 
 /**
  * @author Timofti Gabriel
