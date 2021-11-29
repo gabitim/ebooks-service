@@ -5,7 +5,7 @@ package com.pos.ebook.Ebook.exceptions.generic;
  */
 public class NotFoundException extends RuntimeException{
 
-    public NotFoundException(String resource, String id) {
-        super("Could not find " + resource + " with id: " + id);
+    public <T> NotFoundException(String resource, T id) {
+        super("Could not find " + resource + " with id: " + id.toString());
     }
 }
