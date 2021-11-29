@@ -1,9 +1,10 @@
 package com.pos.ebook.Ebook.service;
 
-import com.pos.ebook.Ebook.exceptions.books.BookNotFoundException;
+import com.pos.ebook.Ebook.exceptions.generic.NotFoundException;
 import com.pos.ebook.Ebook.model.Book;
 import com.pos.ebook.Ebook.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 @Service
 public class BookService {
     private final BookRepository bookRepository;
+    private static final String BOOK = "Book";
 
     @Autowired
     public BookService(BookRepository bookRepository) {
@@ -27,7 +29,7 @@ public class BookService {
 
     public Book getBookById(String id) {
         return bookRepository.findById(id)
-                .orElseThrow(() -> new BookNotFoundException(id));
+                .orElseThrow(() -> new NotFoundException(BOOK, id));
     }
 
     public Book addBook(Book book) {
@@ -51,6 +53,12 @@ public class BookService {
     }
 
     public void deleteBook(String id) {
-        bookRepository.deleteById(id);
+        try {
+            bookRepository.deleteById(id);
+        }
+        catch (EmptyResultDataAccessException exception) {
+            // we would log this
+            throw(new NotFoundException(BOOK, id));
+        }
     }
 }

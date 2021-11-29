@@ -1,4 +1,4 @@
-package com.pos.ebook.Ebook.exceptions.books;
+package com.pos.ebook.Ebook.exceptions.generic;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 
 @ControllerAdvice
-public class BookNotFoundAdvice {
+public class NotFoundAdvice {
 
     @ResponseBody
-    @ExceptionHandler(BookNotFoundException.class)
+    @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String bookNotFoundHandler(BookNotFoundException ex) {
+    String notFoundHandler(NotFoundException ex) {
         return ex.getMessage();
     }
 }
