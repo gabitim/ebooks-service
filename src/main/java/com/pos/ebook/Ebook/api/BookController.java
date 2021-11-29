@@ -3,6 +3,7 @@ package com.pos.ebook.Ebook.api;
 import com.pos.ebook.Ebook.model.Book;
 import com.pos.ebook.Ebook.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteBook(@PathVariable String id) {
         bookService.deleteBook(id);
     }

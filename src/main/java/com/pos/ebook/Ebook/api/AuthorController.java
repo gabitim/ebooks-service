@@ -3,6 +3,7 @@ package com.pos.ebook.Ebook.api;
 import com.pos.ebook.Ebook.model.Author;
 import com.pos.ebook.Ebook.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public class AuthorController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteAuthor(@PathVariable Long id) {
         authorService.deleteAuthor(id);
     }
