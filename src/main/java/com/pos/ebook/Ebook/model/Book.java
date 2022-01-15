@@ -10,18 +10,26 @@ import java.util.Objects;
 @Entity
 @Table(name = "books")
 public class Book {
+
+    @Column(name = "ISBN")
     @Id
-    String ISBN;
-    @Column(unique = true)
+    private String ISBN;
+
+    @Column(name = "Titlu", nullable = false, unique = true)
     private String Titlu;
+
+    @Column(name = "Editura", nullable = false)
     private String Editura;
-    private int An_publicare;
+
+    @Column(name = "An_publicare", nullable = false)
+    private Integer An_publicare;
+
+    @Column(name = "Gen_literar", nullable = false)
     private String Gen_literar;
 
-    public Book() {
-    }
+    public Book() {}
 
-    public Book(String ISBN, String Titlu, String Editura, int An_publicare, String Gen_literar ) {
+    public Book(String ISBN, String Titlu, String Editura, Integer An_publicare, String Gen_literar ) {
         this.ISBN = ISBN;
         this.Titlu = Titlu;
         this.Editura = Editura;

@@ -25,10 +25,10 @@ public class AuthorController {
         return authorService.getAuthors();
     }
 
-    @GetMapping("/{id}")
-    Author getAuthorById(@PathVariable Long id) {
-        return authorService.getAuthorById(id);
-    }
+//    @GetMapping("/{id}")
+//    Author getAuthorById(@PathVariable Long id) {
+//        return authorService.getAuthorById(id);
+//    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -41,9 +41,9 @@ public class AuthorController {
         return authorService.replaceAuthor(author, id);
     }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    void deleteAuthor(@PathVariable Long id) {
-        authorService.deleteAuthor(id);
-    }
+//    @DeleteMapping("/{id}")
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    void deleteAuthor(@PathVariable Long id) {
+//        authorService.deleteAuthor(id);
+//    }
 }

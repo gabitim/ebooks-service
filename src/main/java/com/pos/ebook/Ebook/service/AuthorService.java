@@ -1,6 +1,5 @@
 package com.pos.ebook.Ebook.service;
 
-import com.pos.ebook.Ebook.exceptions.notFound.NotFoundException;
 import com.pos.ebook.Ebook.model.Author;
 import com.pos.ebook.Ebook.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +28,10 @@ public class AuthorService {
         return authorRepository.findAll();
     }
 
-    public Author getAuthorById(Long id) {
-        return authorRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(AUTHOR, id));
-    }
+//    public Author getAuthorById(Long id) {
+//        return authorRepository.findById(id)
+//                .orElseThrow(() -> new NotFoundException(AUTHOR, id));
+//    }
 
     public Author addAuthor(Author author) {
         return authorRepository.save(author);
@@ -52,13 +51,13 @@ public class AuthorService {
                 });
     }
 
-    public void deleteAuthor(Long id) {
-        try {
-            authorRepository.deleteById(id);
-        }
-        catch (EmptyResultDataAccessException exception) {
-            // we would log this
-            throw new NotFoundException(AUTHOR, id);
-        }
-    }
+//    public void deleteAuthor(Long id) {
+//        try {
+//            authorRepository.deleteById(id);
+//        }
+//        catch (EmptyResultDataAccessException exception) {
+//            // we would log this
+//            throw new NotFoundException(AUTHOR, id);
+//        }
+//    }
 }
