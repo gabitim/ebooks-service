@@ -8,44 +8,50 @@ import java.util.Objects;
  */
 
 @Entity
-@Table(name = "authors")
+@Table(name = "author")
 public class Author {
+
+    @Column(name = "id", nullable = false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
-    private String Prenume;
-    private String Nume;
+    private Long id;
+
+    @Column(name = "first_name", nullable = false)
+    private String first_name;
+
+    @Column(name = "last_name", nullable = false)
+    private String last_name;
 
     public Author() {}
 
-    public Author(Long ID, String prenume, String nume) {
-        this.ID = ID;
-        Prenume = prenume;
-        Nume = nume;
+    public Author(Long id, String first_name, String last_name) {
+        this.id = id;
+        this.first_name = first_name;
+        this.last_name = last_name;
     }
 
-    public Long getID() {
-        return ID;
+    public Long getId() {
+        return id;
     }
 
-    public void setID(Long ID) {
-        this.ID = ID;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getPrenume() {
-        return Prenume;
+    public String getFirst_name() {
+        return first_name;
     }
 
-    public void setPrenume(String prenume) {
-        Prenume = prenume;
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
     }
 
-    public String getNume() {
-        return Nume;
+    public String getLast_name() {
+        return last_name;
     }
 
-    public void setNume(String nume) {
-        Nume = nume;
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
     }
 
     @Override
@@ -53,20 +59,20 @@ public class Author {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Author author = (Author) o;
-        return Objects.equals(ID, author.ID) && Objects.equals(Prenume, author.Prenume) && Objects.equals(Nume, author.Nume);
+        return Objects.equals(id, author.id) && Objects.equals(first_name, author.first_name) && Objects.equals(last_name, author.last_name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(ID, Prenume, Nume);
+        return Objects.hash(id, first_name, last_name);
     }
 
     @Override
     public String toString() {
         return "Author{" +
-                "ID=" + ID +
-                ", Prenume='" + Prenume + '\'' +
-                ", Nume='" + Nume + '\'' +
+                "id=" + id +
+                ", first_name='" + first_name + '\'' +
+                ", last_name='" + last_name + '\'' +
                 '}';
     }
 }

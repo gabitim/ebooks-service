@@ -1,18 +1,20 @@
 package com.pos.ebook.Ebook.api;
 
-import com.pos.ebook.Ebook.model.Author;
+import com.pos.ebook.Ebook.exceptions.ResourceNotFoundException;
+import com.pos.ebook.Ebook.model.dtos.AuthorDto;
 import com.pos.ebook.Ebook.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Timofti Gabriel
  */
 
+@Validated
 @RestController
 @RequestMapping("/authors")
 public class AuthorController {
@@ -21,29 +23,14 @@ public class AuthorController {
     AuthorService authorService;
 
     @GetMapping
-    List<Author> getAuthors() {
-        return authorService.getAuthors();
+    List<AuthorDto> getAuthors() {
+        return authorService.getAuthors().stream().map(AuthorDto::from).collect(Collectors.toList());
     }
 
-//    @GetMapping("/{id}")
-//    Author getAuthorById(@PathVariable Long id) {
-//        return authorService.getAuthorById(id);
-//    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    Author addAuthor(@RequestBody Author author) {
-        return authorService.addAuthor(author);
+    @GetMapping("/{id}")
+    AuthorDto getAuthorById(@PathVariable Long id) throws ResourceNotFoundException {
+        return AuthorDto.from(authorService.getAuthorById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No author found with this id: " + id))
+        );
     }
-
-    @PutMapping("/{id}")
-    ResponseEntity<Author> replaceAuthor(@RequestBody Author author, @PathVariable Long id) {
-        return authorService.replaceAuthor(author, id);
-    }
-
-//    @DeleteMapping("/{id}")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    void deleteAuthor(@PathVariable Long id) {
-//        authorService.deleteAuthor(id);
-//    }
 }
