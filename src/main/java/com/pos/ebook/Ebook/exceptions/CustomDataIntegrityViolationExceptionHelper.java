@@ -12,13 +12,13 @@ public class CustomDataIntegrityViolationExceptionHelper {
 
     public String getMessage() {
         if(isConstraintViolationException()) {
-            if (isUniqueConstraintForBookTitlu(castToConstraintViolationException(exception).getConstraintName())) {
+            if (isUniqueConstraintForBookTitle(castToConstraintViolationException(exception).getConstraintName())) {
                 return "There is already a book with this title";
             }
             // ... other constraints
         }
 
-        return "";
+        return exception.getMessage();
     }
 
     private boolean isConstraintViolationException() {
@@ -29,7 +29,7 @@ public class CustomDataIntegrityViolationExceptionHelper {
         return ((ConstraintViolationException) exception.getCause());
     }
 
-    private boolean isUniqueConstraintForBookTitlu(String constraintName) {
-        return constraintName.equals("books.Titlu_UNIQUE");
+    private boolean isUniqueConstraintForBookTitle(String constraintName) {
+        return constraintName.equals("book.title_UNIQUE");
     }
 }

@@ -3,7 +3,6 @@ package com.pos.ebook.Ebook.model.dtos;
 import com.pos.ebook.Ebook.model.Book;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.*;
 
@@ -16,33 +15,33 @@ import javax.validation.constraints.*;
 public class BookDto {
     @NotBlank(message = "isbn field is required")
     @Size(min = 1, max = 10, message = "isbn field size must be between 1 and 10")
-    private String ISBN;
+    private String isbn;
 
-    @NotBlank(message = "titlu field is required")
-    @Size(min = 1, max = 50, message = "titlu field size must be between 1 and 50")
-    private String Titlu;
+    @NotBlank(message = "title field is required")
+    @Size(min = 1, max = 50, message = "title field size must be between 1 and 50")
+    private String title;
 
-    @NotBlank(message = "editura field is required")
-    @Size(min = 1, max = 50, message = "editura field size must be between 1 and 50")
-    private String Editura;
+    @NotBlank(message = "publishing_house field is required")
+    @Size(min = 1, max = 50, message = "publishing_house field size must be between 1 and 50")
+    private String publishing_house;
 
-    @NotNull(message = "an_publicare field is required")
-    private Integer An_publicare;
+    @NotNull(message = "publishing_year field is required")
+    private Integer publishing_year;
 
-    @NotBlank(message = "gen_literar field is required")
-    @Size(min = 1, max = 50, message = "gen_literar field size must be between 1 and 50")
-    private String Gen_literar;
+    @NotBlank(message = "genre field is required")
+    @Size(min = 1, max = 50, message = "genre field size must be between 1 and 50")
+    private String genre;
 
     public Book toBook() {
-        return new Book(ISBN, Titlu, Editura, An_publicare, Gen_literar);
+        return new Book(isbn, title, publishing_house, publishing_year, genre);
     }
 
     public static BookDto from(Book book) {
         return new BookDto()
-                .setISBN(book.getISBN())
-                .setTitlu(book.getTitlu())
-                .setEditura(book.getEditura())
-                .setAn_publicare(book.getAn_publicare())
-                .setGen_literar(book.getGen_literar());
+                .setIsbn(book.getIsbn())
+                .setTitle(book.getTitle())
+                .setPublishing_house(book.getPublishing_house())
+                .setPublishing_year(book.getPublishing_year())
+                .setGenre(book.getGenre());
     }
 }

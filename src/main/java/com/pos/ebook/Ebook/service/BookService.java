@@ -21,16 +21,16 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
-    public boolean existsBookById(String id) {
-        return bookRepository.existsById(id);
+    public boolean existsBookByIsbn(String isbn) {
+        return bookRepository.existsById(isbn);
     }
 
     public List<Book> getBooks() {
         return bookRepository.findAll();
     }
 
-    public Optional<Book> getBookById(String id) {
-        return bookRepository.findById(id);
+    public Optional<Book> getBookByIsbn(String isbn) {
+        return bookRepository.findById(isbn);
     }
 
     public Book addBook(Book book) {
@@ -40,18 +40,18 @@ public class BookService {
     public Book replaceBook(Book newBook, String id) {
         return bookRepository.findById(id)
                 .map(book -> {
-                    book.setTitlu(newBook.getTitlu());
-                    book.setEditura(newBook.getEditura());
-                    book.setAn_publicare(newBook.getAn_publicare());
-                    book.setGen_literar(newBook.getGen_literar());
+                    book.setTitle(newBook.getTitle());
+                    book.setPublishing_house(newBook.getPublishing_house());
+                    book.setPublishing_year(newBook.getPublishing_year());
+                    book.setGenre(newBook.getGenre());
 
                     return bookRepository.save(book);
                 })
                 .orElseGet(() -> addBook(newBook));
     }
 
-    public void deleteBook(String id) {
-        bookRepository.deleteById(id);
+    public void deleteBook(String isbn) {
+        bookRepository.deleteById(isbn);
     }
 }
 

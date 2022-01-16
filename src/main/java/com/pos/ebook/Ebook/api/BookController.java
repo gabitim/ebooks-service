@@ -36,16 +36,16 @@ public class BookController {
     }
 
     @GetMapping("/{isbn}")
-    BookDto getBookById(@PathVariable String isbn) throws ResourceNotFoundException {
-        return BookDto.from(bookService.getBookById(isbn)
+    BookDto getBookByIsbn(@PathVariable String isbn) throws ResourceNotFoundException {
+        return BookDto.from(bookService.getBookByIsbn(isbn)
                 .orElseThrow(() -> new ResourceNotFoundException("No book found with isbn: " + isbn))
         );
     }
 
     @PostMapping
     ResponseEntity<BookDto> addBook(@Valid @RequestBody BookDto bookDto) throws ResourceConflictException {
-        if (bookService.existsBookById(bookDto.getISBN())) {
-            throw new ResourceConflictException("There is already a book with isbn: " + bookDto.getISBN());
+        if (bookService.existsBookByIsbn(bookDto.getIsbn())) {
+            throw new ResourceConflictException("There is already a book with isbn: " + bookDto.getIsbn());
         }
         else {
             try {
@@ -64,11 +64,11 @@ public class BookController {
             throws ResourceConflictException, ResourceNotAcceptableException {
         HttpStatus httpStatus;
 
-        if(! bookDto.getISBN().equals(isbn)) {
+        if(! bookDto.getIsbn().equals(isbn)) {
             throw new ResourceNotAcceptableException("isbn body field doesn't match the isbn path variable");
         }
 
-        if (bookService.existsBookById(isbn)) {
+        if (bookService.existsBookByIsbn(isbn)) {
             httpStatus = HttpStatus.NO_CONTENT;
         }
         else {
@@ -87,7 +87,7 @@ public class BookController {
 
     @DeleteMapping("/{isbn}")
     ResponseEntity<?> deleteBook(@PathVariable String isbn) throws ResourceNotFoundException {
-        if (bookService.existsBookById(isbn)) {
+        if (bookService.existsBookByIsbn(isbn)) {
             bookService.deleteBook(isbn);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

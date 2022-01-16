@@ -8,73 +8,73 @@ import java.util.Objects;
  */
 
 @Entity
-@Table(name = "books")
+@Table(name = "book")
 public class Book {
 
-    @Column(name = "ISBN")
+    @Column(name = "isbn")
     @Id
-    private String ISBN;
+    private String isbn;
 
-    @Column(name = "Titlu", nullable = false, unique = true)
-    private String Titlu;
+    @Column(name = "title", nullable = false, unique = true)
+    private String title;
 
-    @Column(name = "Editura", nullable = false)
-    private String Editura;
+    @Column(name = "publishing_house", nullable = false)
+    private String publishing_house;
 
-    @Column(name = "An_publicare", nullable = false)
-    private Integer An_publicare;
+    @Column(name = "publishing_year", nullable = false)
+    private Integer publishing_year;
 
-    @Column(name = "Gen_literar", nullable = false)
-    private String Gen_literar;
+    @Column(name = "genre", nullable = false)
+    private String genre;
 
     public Book() {}
 
-    public Book(String ISBN, String Titlu, String Editura, Integer An_publicare, String Gen_literar ) {
-        this.ISBN = ISBN;
-        this.Titlu = Titlu;
-        this.Editura = Editura;
-        this.An_publicare = An_publicare;
-        this.Gen_literar = Gen_literar;
+    public Book(String isbn, String title, String publishing_house, Integer publishing_year, String genre ) {
+        this.isbn = isbn;
+        this.title = title;
+        this.publishing_house = publishing_house;
+        this.publishing_year = publishing_year;
+        this.genre = genre;
     }
 
-    public String getISBN() {
-        return ISBN;
+    public String getIsbn() {
+        return isbn;
     }
 
-    public void setISBN(String ISBN) {
-        this.ISBN = ISBN;
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
-    public String getTitlu() {
-        return Titlu;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTitlu(String titlu) {
-        Titlu = titlu;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getEditura() {
-        return Editura;
+    public String getPublishing_house() {
+        return publishing_house;
     }
 
-    public void setEditura(String editura) {
-        Editura = editura;
+    public void setPublishing_house(String publishing_house) {
+        this.publishing_house = publishing_house;
     }
 
-    public int getAn_publicare() {
-        return An_publicare;
+    public Integer getPublishing_year() {
+        return publishing_year;
     }
 
-    public void setAn_publicare(int an_publicare) {
-        An_publicare = an_publicare;
+    public void setPublishing_year(Integer publishing_year) {
+        this.publishing_year = publishing_year;
     }
 
-    public String getGen_literar() {
-        return Gen_literar;
+    public String getGenre() {
+        return genre;
     }
 
-    public void setGen_literar(String gen_literar) {
-        Gen_literar = gen_literar;
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 
     @Override
@@ -82,26 +82,26 @@ public class Book {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return Objects.equals(ISBN, book.ISBN) &&
-                Objects.equals(Titlu, book.Titlu) &&
-                Objects.equals(Editura, book.Editura) &&
-                Objects.equals(An_publicare, book.An_publicare) &&
-                Objects.equals(Gen_literar, book.Gen_literar);
+        return Objects.equals(isbn, book.isbn) &&
+                Objects.equals(title, book.title) &&
+                Objects.equals(publishing_house, book.publishing_house) &&
+                Objects.equals(publishing_year, book.publishing_year) &&
+                Objects.equals(genre, book.genre);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(ISBN, Titlu, Editura, An_publicare, Gen_literar);
+        return Objects.hash(isbn, title, publishing_house, publishing_year, genre);
     }
 
     @Override
     public String toString() {
         return "Book{" +
-                "ISBN='" + ISBN + '\'' +
-                ", Titlu='" + Titlu + '\'' +
-                ", Editura='" + Editura + '\'' +
-                ", An_publicare=" + An_publicare +
-                ", Gen_literar='" + Gen_literar + '\'' +
+                "isbn='" + isbn + '\'' +
+                ", title='" + title + '\'' +
+                ", publishingHouse='" + publishing_house + '\'' +
+                ", publishingYear=" + publishing_year +
+                ", genre='" + genre + '\'' +
                 '}';
     }
 }
