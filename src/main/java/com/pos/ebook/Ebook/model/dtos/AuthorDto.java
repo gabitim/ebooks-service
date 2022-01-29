@@ -25,6 +25,10 @@ public class AuthorDto {
     @Size(min = 1, max = 50, message = "last_name field size must be between 1 and 50")
     private String last_name;
 
+    public Author toAuthor() {
+        return new Author(id, first_name, last_name);
+    }
+
     public static AuthorDto from(Author author) {
         return new AuthorDto()
                 .setFirst_name(author.getFirst_name())

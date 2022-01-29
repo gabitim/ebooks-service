@@ -55,7 +55,4 @@ public class BookService {
     }
 }
 
-//todo
-// 1. rename fields in eng camelCase
-// 2. book_author service
-// 3. hateoas
+//todo hateoas

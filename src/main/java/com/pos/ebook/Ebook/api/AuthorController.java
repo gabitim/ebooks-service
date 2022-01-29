@@ -1,13 +1,17 @@
 package com.pos.ebook.Ebook.api;
 
+import com.pos.ebook.Ebook.exceptions.ResourceConflictException;
 import com.pos.ebook.Ebook.exceptions.ResourceNotFoundException;
 import com.pos.ebook.Ebook.model.dtos.AuthorDto;
 import com.pos.ebook.Ebook.service.AuthorService;
 import com.pos.ebook.Ebook.service.BookAuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,5 +44,36 @@ public class AuthorController {
     @GetMapping("/books/{isbn}/authors")
     List<AuthorDto> getBookAuthors(@PathVariable String isbn) {
         return bookAuthorService.getAuthorsByBookIsbn(isbn).stream().map(AuthorDto::from).collect(Collectors.toList());
+    }
+
+    @PostMapping("/authors")
+    ResponseEntity<AuthorDto> addAuthor(@Valid @RequestBody AuthorDto authorDto) throws ResourceConflictException {
+        if (authorService.existsAuthor(authorDto.toAuthor())) {
+            throw new ResourceConflictException(
+                    "There is already an author with this name: " + authorDto.getFirst_name() + " " + authorDto.getLast_name());
+        }
+        else {
+            return new ResponseEntity<>(AuthorDto.from(authorService.addAuthor(authorDto.toAuthor())), HttpStatus.CREATED);
+        }
+    }
+
+    @PutMapping("/authors/{id}")
+    ResponseEntity<AuthorDto> replaceAuthor(@Valid @RequestBody AuthorDto authorDto, @PathVariable Long id)
+            throws ResourceConflictException {
+        HttpStatus httpStatus;
+
+        if (authorService.existsAuthor(authorDto.toAuthor())) {
+            throw new ResourceConflictException(
+                    "There is already an author with this name: " + authorDto.getFirst_name() + " " + authorDto.getLast_name());
+        }
+
+        if(authorService.existsAuthorById(id)) {
+            httpStatus = HttpStatus.NO_CONTENT;
+        }
+        else {
+            httpStatus = HttpStatus.CREATED;
+        }
+
+        return new ResponseEntity<>(AuthorDto.from(authorService.replaceAuthor(authorDto.toAuthor(), id)), httpStatus);
     }
 }

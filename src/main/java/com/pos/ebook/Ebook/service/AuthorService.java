@@ -21,6 +21,10 @@ public class AuthorService {
         this.authorRepository = authorRepository;
     }
 
+    public boolean existsAuthor(Author author) {
+        return getAuthor(author).isPresent();
+    }
+
     public boolean existsAuthorById(Long id) {
         return authorRepository.existsById(id);
     }
@@ -31,6 +35,10 @@ public class AuthorService {
 
     public Optional<Author> getAuthorById(Long id) {
         return authorRepository.findById(id);
+    }
+
+    public Optional<Author> getAuthor(Author author) {
+        return authorRepository.findAuthor(author.getFirst_name(), author.getLast_name());
     }
 
     public Author addAuthor(Author author) {
@@ -46,9 +54,5 @@ public class AuthorService {
                     return authorRepository.save(author);
                 })
                 .orElseGet(() -> addAuthor(newAuthor));
-    }
-
-    public void deleteAuthor(Long id) {
-        authorRepository.deleteById(id);
     }
 }
