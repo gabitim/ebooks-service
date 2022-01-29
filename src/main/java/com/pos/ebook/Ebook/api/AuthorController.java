@@ -16,18 +16,17 @@ import java.util.stream.Collectors;
 
 @Validated
 @RestController
-@RequestMapping("/authors")
 public class AuthorController {
 
     @Autowired
     AuthorService authorService;
 
-    @GetMapping
+    @GetMapping("/authors")
     List<AuthorDto> getAuthors() {
         return authorService.getAuthors().stream().map(AuthorDto::from).collect(Collectors.toList());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/authors/{id}")
     AuthorDto getAuthorById(@PathVariable Long id) throws ResourceNotFoundException {
         return AuthorDto.from(authorService.getAuthorById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No author found with this id: " + id))
