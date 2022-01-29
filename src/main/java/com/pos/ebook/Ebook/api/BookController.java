@@ -5,6 +5,7 @@ import com.pos.ebook.Ebook.exceptions.CustomDataIntegrityViolationExceptionHelpe
 import com.pos.ebook.Ebook.exceptions.ResourceNotAcceptableException;
 import com.pos.ebook.Ebook.exceptions.ResourceNotFoundException;
 import com.pos.ebook.Ebook.model.dtos.BookDto;
+import com.pos.ebook.Ebook.service.BookAuthorService;
 import com.pos.ebook.Ebook.service.BookService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class BookController {
     @Autowired
     BookService bookService;
 
+    @Autowired
+    BookAuthorService bookAuthorService;
+
     @GetMapping("/books")
     List<BookDto> getBooks() {
         return bookService.getBooks().stream().map(BookDto::from).collect(Collectors.toList());
@@ -41,7 +45,12 @@ public class BookController {
         );
     }
 
-    @PostMapping
+    @GetMapping("/authors/{id}/books")
+    List<BookDto> getAuthorBooks(@PathVariable Long id) {
+        return bookAuthorService.getBooksByAuthorId(id).stream().map(BookDto::from).collect(Collectors.toList());
+    }
+
+    @PostMapping("/books")
     ResponseEntity<BookDto> addBook(@Valid @RequestBody BookDto bookDto) throws ResourceConflictException {
         if (bookService.existsBookByIsbn(bookDto.getIsbn())) {
             throw new ResourceConflictException("There is already a book with isbn: " + bookDto.getIsbn());
@@ -84,14 +93,59 @@ public class BookController {
         }
     }
 
+    @PutMapping("books/{isbn}/authors/{id}")
+    ResponseEntity<?> addAuthorToBook(@PathVariable String isbn, @PathVariable Integer id)
+            throws ResourceNotFoundException, ResourceConflictException {
+        if (!bookService.existsBookByIsbn(isbn)) {
+            throw new ResourceNotFoundException("No book found with isbn: " + isbn);
+        }
+
+        if (!bookAuthorService.existsAuthorById(id)) {
+            throw new ResourceNotFoundException("No author found with id: " + id);
+        }
+
+        if(bookAuthorService.getAuthorsIdsByBookIsbn(isbn).contains(id)) {
+            throw new ResourceConflictException("Book with isbn: " + isbn + " has author with id: " + id);
+        }
+
+        bookAuthorService.addBookAuthor(isbn, id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @DeleteMapping("books/{isbn}")
     ResponseEntity<?> deleteBook(@PathVariable String isbn) throws ResourceNotFoundException {
         if (bookService.existsBookByIsbn(isbn)) {
+            bookAuthorService.deleteBookAuthors(isbn);
             bookService.deleteBook(isbn);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         else {
             throw new ResourceNotFoundException("No book found with isbn: " + isbn);
         }
-   }
+    }
+
+    @DeleteMapping("books/{isbn}/authors")
+    ResponseEntity<?> deleteBookAuthors(@PathVariable String isbn) throws ResourceNotFoundException {
+        if (!bookService.existsBookByIsbn(isbn)) {
+            throw new ResourceNotFoundException("No book found with isbn: " + isbn);
+        }
+
+        bookAuthorService.deleteBookAuthors(isbn);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+
+    @DeleteMapping("books/{isbn}/authors/{id}")
+    ResponseEntity<?> deleteBookAuthor(@PathVariable String isbn, @PathVariable Integer id) throws ResourceNotFoundException {
+        if (!bookService.existsBookByIsbn(isbn)) {
+            throw new ResourceNotFoundException("No book found with isbn: " + isbn);
+        }
+
+        if(!bookAuthorService.getAuthorsIdsByBookIsbn(isbn).contains(id)) {
+            throw new ResourceNotFoundException("No author found with id: " + id);
+        }
+
+        bookAuthorService.deleteBookAuthor(isbn, id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

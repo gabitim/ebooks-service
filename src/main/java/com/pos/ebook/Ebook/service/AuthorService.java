@@ -21,6 +21,10 @@ public class AuthorService {
         this.authorRepository = authorRepository;
     }
 
+    public boolean existsAuthorById(Long id) {
+        return authorRepository.existsById(id);
+    }
+
     public List<Author> getAuthors() {
         return authorRepository.findAll();
     }
