@@ -24,18 +24,17 @@ import java.util.stream.Collectors;
 
 @Validated
 @RestController
-@RequestMapping("/books")
 public class BookController {
 
     @Autowired
     BookService bookService;
 
-    @GetMapping
+    @GetMapping("/books")
     List<BookDto> getBooks() {
         return bookService.getBooks().stream().map(BookDto::from).collect(Collectors.toList());
     }
 
-    @GetMapping("/{isbn}")
+    @GetMapping("/books/{isbn}")
     BookDto getBookByIsbn(@PathVariable String isbn) throws ResourceNotFoundException {
         return BookDto.from(bookService.getBookByIsbn(isbn)
                 .orElseThrow(() -> new ResourceNotFoundException("No book found with isbn: " + isbn))
@@ -59,7 +58,7 @@ public class BookController {
         }
     }
 
-    @PutMapping("/{isbn}")
+    @PutMapping("books/{isbn}")
     ResponseEntity<BookDto> replaceBook(@Valid @RequestBody BookDto bookDto, @PathVariable String isbn)
             throws ResourceConflictException, ResourceNotAcceptableException {
         HttpStatus httpStatus;
@@ -85,7 +84,7 @@ public class BookController {
         }
     }
 
-    @DeleteMapping("/{isbn}")
+    @DeleteMapping("books/{isbn}")
     ResponseEntity<?> deleteBook(@PathVariable String isbn) throws ResourceNotFoundException {
         if (bookService.existsBookByIsbn(isbn)) {
             bookService.deleteBook(isbn);
