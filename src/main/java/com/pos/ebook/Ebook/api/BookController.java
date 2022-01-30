@@ -5,6 +5,7 @@ import com.pos.ebook.Ebook.exceptions.CustomDataIntegrityViolationExceptionHelpe
 import com.pos.ebook.Ebook.exceptions.ResourceNotAcceptableException;
 import com.pos.ebook.Ebook.exceptions.ResourceNotFoundException;
 import com.pos.ebook.Ebook.model.dtos.BookDto;
+import com.pos.ebook.Ebook.model.dtos.BookPartialDto;
 import com.pos.ebook.Ebook.service.BookAuthorService;
 import com.pos.ebook.Ebook.service.BookService;
 
@@ -122,7 +123,20 @@ public class BookController {
     }
 
     @GetMapping("/books/{isbn}")
-    BookDto getBookByIsbn(@PathVariable String isbn) throws ResourceNotFoundException {
+    Object getBookByIsbn(@PathVariable String isbn, @RequestParam(name = "verbose", required = false) Boolean verbose)
+            throws ResourceNotFoundException {
+        if(verbose != null) {
+            if(verbose) {
+                return BookDto.from(bookService.getBookByIsbn(isbn)
+                        .orElseThrow(() -> new ResourceNotFoundException("No book found with isbn: " + isbn))
+                );
+            }
+            else {
+                return BookPartialDto.from(bookService.getBookByIsbn(isbn)
+                        .orElseThrow(() -> new ResourceNotFoundException("No book found with isbn: " + isbn))
+                );
+            }
+        }
         return BookDto.from(bookService.getBookByIsbn(isbn)
                 .orElseThrow(() -> new ResourceNotFoundException("No book found with isbn: " + isbn))
         );
