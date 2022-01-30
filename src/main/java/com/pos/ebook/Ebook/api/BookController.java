@@ -38,6 +38,17 @@ public class BookController {
         return bookService.getBooks().stream().map(BookDto::from).collect(Collectors.toList());
     }
 
+    @GetMapping(value = "/books", params = {"page"})
+    List<BookDto> getBooks(@RequestParam("page") int page ) {
+        return bookService.getBooks(page).stream().map(BookDto::from).collect(Collectors.toList());
+    }
+
+
+    @GetMapping(value = "/books", params = {"page", "items_per_page"})
+    List<BookDto> getBooks(@RequestParam("page") int page, @RequestParam("items_per_page") int noItems ) {
+        return bookService.getBooks(page, noItems).stream().map(BookDto::from).collect(Collectors.toList());
+    }
+
     @GetMapping("/books/{isbn}")
     BookDto getBookByIsbn(@PathVariable String isbn) throws ResourceNotFoundException {
         return BookDto.from(bookService.getBookByIsbn(isbn)
