@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -30,8 +31,20 @@ public class AuthorController {
     BookAuthorService bookAuthorService;
 
     @GetMapping("/authors")
-    List<AuthorDto> getAuthors() {
-        return authorService.getAuthors().stream().map(AuthorDto::from).collect(Collectors.toList());
+    List<AuthorDto> getAuthors(
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "match", required = false) String match
+            ) {
+        System.out.println(name + " " + match);
+        if (name != null && !Objects.equals(match, "exact")) {
+            return authorService.findAuthorsByPartialName(name).stream().map(AuthorDto::from).collect(Collectors.toList());
+        }
+        if (name != null && Objects.equals(match, "exact")) {
+            return authorService.findAuthorByExactName(name).stream().map(AuthorDto::from).collect(Collectors.toList());
+        }
+        else {
+            return authorService.getAuthors().stream().map(AuthorDto::from).collect(Collectors.toList());
+        }
     }
 
     @GetMapping("/authors/{id}")
@@ -50,7 +63,7 @@ public class AuthorController {
     ResponseEntity<AuthorDto> addAuthor(@Valid @RequestBody AuthorDto authorDto) throws ResourceConflictException {
         if (authorService.existsAuthor(authorDto.toAuthor())) {
             throw new ResourceConflictException(
-                    "There is already an author with this name: " + authorDto.getFirst_name() + " " + authorDto.getLast_name());
+                    "There is already an author with this name: " + authorDto.getFirstName() + " " + authorDto.getLastName());
         }
         else {
             return new ResponseEntity<>(AuthorDto.from(authorService.addAuthor(authorDto.toAuthor())), HttpStatus.CREATED);
@@ -64,7 +77,7 @@ public class AuthorController {
 
         if (authorService.existsAuthor(authorDto.toAuthor())) {
             throw new ResourceConflictException(
-                    "There is already an author with this name: " + authorDto.getFirst_name() + " " + authorDto.getLast_name());
+                    "There is already an author with this name: " + authorDto.getFirstName() + " " + authorDto.getLastName());
         }
 
         if(authorService.existsAuthorById(id)) {

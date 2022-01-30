@@ -38,7 +38,22 @@ public class AuthorService {
     }
 
     public Optional<Author> getAuthor(Author author) {
-        return authorRepository.findAuthor(author.getFirst_name(), author.getLast_name());
+        return authorRepository.findAuthorByFirstNameAndLastName(author.getFirstName(), author.getLastName());
+    }
+
+    public Optional<Author> findAuthorByExactName(String name) {
+        String[] splitName = name.split(" ", 2);
+
+        if (splitName.length < 2) {
+            return Optional.empty();
+        }
+        else {
+            return authorRepository.findAuthorByFirstNameAndLastName(splitName[0], splitName[1]);
+        }
+    }
+
+    public List<Author> findAuthorsByPartialName(String name) {
+        return authorRepository.findAuthorByFirstNameContainingOrLastNameContaining(name, name);
     }
 
     public Author addAuthor(Author author) {
@@ -48,8 +63,8 @@ public class AuthorService {
     public Author replaceAuthor(Author newAuthor, Long id) {
         return authorRepository.findById(id)
                 .map(author -> {
-                    author.setFirst_name(newAuthor.getFirst_name());
-                    author.setLast_name(newAuthor.getLast_name());
+                    author.setFirstName(newAuthor.getFirstName());
+                    author.setLastName(newAuthor.getLastName());
 
                     return authorRepository.save(author);
                 })
