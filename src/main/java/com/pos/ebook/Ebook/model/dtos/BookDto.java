@@ -2,6 +2,7 @@ package com.pos.ebook.Ebook.model.dtos;
 
 import com.pos.ebook.Ebook.model.Book;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.*;
@@ -10,9 +11,10 @@ import javax.validation.constraints.*;
  * @author Timofti Gabriel
  */
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class BookDto {
+public class BookDto extends BookPartialDto {
     @NotBlank(message = "isbn field is required")
     @Size(min = 1, max = 10, message = "isbn field size must be between 1 and 10")
     private String isbn;

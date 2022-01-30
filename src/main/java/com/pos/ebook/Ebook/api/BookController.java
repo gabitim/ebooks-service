@@ -1,5 +1,6 @@
 package com.pos.ebook.Ebook.api;
 
+import com.pos.ebook.Ebook.assembler.BookAssembler;
 import com.pos.ebook.Ebook.exceptions.ResourceConflictException;
 import com.pos.ebook.Ebook.exceptions.CustomDataIntegrityViolationExceptionHelper;
 import com.pos.ebook.Ebook.exceptions.ResourceNotAcceptableException;
@@ -11,6 +12,7 @@ import com.pos.ebook.Ebook.service.BookService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -33,6 +35,9 @@ public class BookController {
 
     @Autowired
     BookAuthorService bookAuthorService;
+
+    @Autowired
+    BookAssembler bookAssembler;
 
     @GetMapping("/books")
     List<BookDto> getBooks(
@@ -98,7 +103,7 @@ public class BookController {
     }
 
     @GetMapping(value = "/books", params = {"genre", "year"})
-    List<BookDto> getBooks(
+    public List<BookDto> getBooks(
             @RequestParam(name = "genre", required = false) String genre,
             @RequestParam(name = "year", required = false) Integer year,
             @RequestParam(name = "page", required = false) Integer page,
@@ -123,23 +128,24 @@ public class BookController {
     }
 
     @GetMapping("/books/{isbn}")
-    Object getBookByIsbn(@PathVariable String isbn, @RequestParam(name = "verbose", required = false) Boolean verbose)
-            throws ResourceNotFoundException {
+    public EntityModel<? extends BookPartialDto> getBookByIsbn(
+            @PathVariable String isbn,
+            @RequestParam(name = "verbose", required = false) Boolean verbose
+    ) throws ResourceNotFoundException {
         if(verbose != null) {
             if(verbose) {
-                return BookDto.from(bookService.getBookByIsbn(isbn)
-                        .orElseThrow(() -> new ResourceNotFoundException("No book found with isbn: " + isbn))
-                );
+                return bookAssembler.toModel(BookDto.from(bookService.getBookByIsbn(isbn)
+                        .orElseThrow(() -> new ResourceNotFoundException("No book found with isbn: " + isbn))));
             }
             else {
-                return BookPartialDto.from(bookService.getBookByIsbn(isbn)
-                        .orElseThrow(() -> new ResourceNotFoundException("No book found with isbn: " + isbn))
-                );
+                return bookAssembler.toModel(BookPartialDto.from(bookService.getBookByIsbn(isbn)
+                        .orElseThrow(() -> new ResourceNotFoundException("No book found with isbn: " + isbn))), false);
             }
         }
-        return BookDto.from(bookService.getBookByIsbn(isbn)
-                .orElseThrow(() -> new ResourceNotFoundException("No book found with isbn: " + isbn))
-        );
+        else {
+            return bookAssembler.toModel(BookDto.from(bookService.getBookByIsbn(isbn)
+                    .orElseThrow(() -> new ResourceNotFoundException("No book found with isbn: " + isbn))));
+        }
     }
 
     @GetMapping("/authors/{id}/books")

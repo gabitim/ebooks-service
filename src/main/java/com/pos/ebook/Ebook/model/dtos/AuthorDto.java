@@ -2,7 +2,9 @@ package com.pos.ebook.Ebook.model.dtos;
 
 import com.pos.ebook.Ebook.model.Author;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -11,9 +13,10 @@ import javax.validation.constraints.Size;
  * @author Timofti Gabriel
  */
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class AuthorDto {
+public class AuthorDto extends RepresentationModel<AuthorDto> {
 
     private Long id;
 

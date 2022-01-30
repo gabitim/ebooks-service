@@ -1,11 +1,14 @@
 package com.pos.ebook.Ebook.api;
 
+import com.pos.ebook.Ebook.assembler.AuthorAssembler;
 import com.pos.ebook.Ebook.exceptions.ResourceConflictException;
 import com.pos.ebook.Ebook.exceptions.ResourceNotFoundException;
 import com.pos.ebook.Ebook.model.dtos.AuthorDto;
 import com.pos.ebook.Ebook.service.AuthorService;
 import com.pos.ebook.Ebook.service.BookAuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -30,8 +33,11 @@ public class AuthorController {
     @Autowired
     BookAuthorService bookAuthorService;
 
+    @Autowired
+    AuthorAssembler authorAssembler;
+
     @GetMapping("/authors")
-    List<AuthorDto> getAuthors(
+    public List<AuthorDto> getAuthors(
             @RequestParam(name = "name", required = false) String name,
             @RequestParam(name = "match", required = false) String match
             ) {
@@ -48,15 +54,19 @@ public class AuthorController {
     }
 
     @GetMapping("/authors/{id}")
-    AuthorDto getAuthorById(@PathVariable Long id) throws ResourceNotFoundException {
-        return AuthorDto.from(authorService.getAuthorById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No author found with this id: " + id))
-        );
+    public EntityModel<AuthorDto> getAuthorById(@PathVariable Long id) throws ResourceNotFoundException {
+        AuthorDto author = AuthorDto.from(authorService.getAuthorById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No author found with this id: " + id)));
+
+        return authorAssembler.toModel(author);
     }
 
     @GetMapping("/books/{isbn}/authors")
-    List<AuthorDto> getBookAuthors(@PathVariable String isbn) {
-        return bookAuthorService.getAuthorsByBookIsbn(isbn).stream().map(AuthorDto::from).collect(Collectors.toList());
+    public CollectionModel<AuthorDto> getBookAuthors(@PathVariable String isbn) throws ResourceNotFoundException {
+        List<AuthorDto> authors =  bookAuthorService.getAuthorsByBookIsbn(isbn)
+                .stream().map(AuthorDto::from).collect(Collectors.toList());
+
+        return authorAssembler.toCollectionModel(authors, isbn);
     }
 
     @PostMapping("/authors")
