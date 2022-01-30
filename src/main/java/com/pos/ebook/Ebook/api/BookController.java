@@ -34,19 +34,91 @@ public class BookController {
     BookAuthorService bookAuthorService;
 
     @GetMapping("/books")
-    List<BookDto> getBooks() {
-        return bookService.getBooks().stream().map(BookDto::from).collect(Collectors.toList());
+    List<BookDto> getBooks(
+            @RequestParam(name = "page", required = false) Integer page ,
+            @RequestParam(name = "items_per_page", required = false) Integer noItems
+    ) {
+        if (page != null && noItems != null) {
+            return bookService.getBooks(page, noItems).stream().map(BookDto::from).collect(Collectors.toList());
+        }
+        else if (noItems == null && page != null) {
+            return bookService.getBooks(page).stream().map(BookDto::from).collect(Collectors.toList());
+        }
+        else if (noItems != null) {
+            return bookService.getBooks(0, noItems).stream().map(BookDto::from).collect(Collectors.toList());
+        }
+        else {
+            return bookService.getBooks().stream().map(BookDto::from).collect(Collectors.toList());
+        }
     }
 
-    @GetMapping(value = "/books", params = {"page"})
-    List<BookDto> getBooks(@RequestParam("page") int page ) {
-        return bookService.getBooks(page).stream().map(BookDto::from).collect(Collectors.toList());
+    @GetMapping(value = "/books", params = {"genre"})
+    List<BookDto> getBooks(
+            @RequestParam(name = "genre", required = false) String genre,
+            @RequestParam(name = "page", required = false) Integer page,
+            @RequestParam(name = "items_per_page", required = false) Integer noItems
+    ) {
+        if (page != null && noItems != null) {
+            return bookService.getBooksByGenre(genre, page, noItems).stream().map(BookDto::from).collect(Collectors.toList());
+        }
+        else if (noItems == null && page != null) {
+            return bookService.getBooksByGenre(genre, page).stream().map(BookDto::from).collect(Collectors.toList());
+        }
+        else if (noItems != null) {
+            return bookService.getBooksByGenre(genre,0, noItems).stream().map(BookDto::from).collect(Collectors.toList());
+        }
+        else {
+            return bookService.getBooksByGenre(genre).stream().map(BookDto::from).collect(Collectors.toList());
+        }
     }
 
+    @GetMapping(value = "/books", params = {"year"})
+    List<BookDto> getBooks(
+            @RequestParam(name = "year", required = false) Integer year,
+            @RequestParam(name = "page", required = false) Integer page,
+            @RequestParam(name = "items_per_page", required = false) Integer noItems
+    ) {
+        if (page != null && noItems != null) {
+            return bookService.getBooksByPublishingYear(year, page, noItems)
+                    .stream().map(BookDto::from).collect(Collectors.toList());
+        }
+        else if (noItems == null && page != null) {
+            return bookService.getBooksByPublishingYear(year, page)
+                    .stream().map(BookDto::from).collect(Collectors.toList());
+        }
+        else if (noItems != null) {
+            return bookService.getBooksByPublishingYear(year,0, noItems)
+                    .stream().map(BookDto::from).collect(Collectors.toList());
+        }
+        else {
+            return bookService.getBooksByPublishingYear(year)
+                    .stream().map(BookDto::from).collect(Collectors.toList());
+        }
+    }
 
-    @GetMapping(value = "/books", params = {"page", "items_per_page"})
-    List<BookDto> getBooks(@RequestParam("page") int page, @RequestParam("items_per_page") int noItems ) {
-        return bookService.getBooks(page, noItems).stream().map(BookDto::from).collect(Collectors.toList());
+    @GetMapping(value = "/books", params = {"genre", "year"})
+    List<BookDto> getBooks(
+            @RequestParam(name = "genre", required = false) String genre,
+            @RequestParam(name = "year", required = false) Integer year,
+            @RequestParam(name = "page", required = false) Integer page,
+            @RequestParam(name = "items_per_page", required = false) Integer noItems
+    ) {
+        if (page != null && noItems != null) {
+            return bookService.getBooksByGenreAndPublishingYear(genre, year, page, noItems)
+                    .stream().map(BookDto::from).collect(Collectors.toList());
+        }
+        else if (noItems == null && page != null) {
+            return bookService.getBooksByGenreAndPublishingYear(genre, year, page)
+                    .stream().map(BookDto::from).collect(Collectors.toList());
+        }
+        else if (noItems != null) {
+            return bookService.getBooksByGenreAndPublishingYear(genre, year,0, noItems)
+                    .stream().map(BookDto::from).collect(Collectors.toList());
+        }
+        else {
+            return bookService.getBooksByGenreAndPublishingYear(genre, year)
+                    .stream().map(BookDto::from).collect(Collectors.toList());
+        }
     }
 
     @GetMapping("/books/{isbn}")

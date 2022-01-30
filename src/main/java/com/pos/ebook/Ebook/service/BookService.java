@@ -52,6 +52,69 @@ public class BookService {
         }
     }
 
+    public List<Book> getBooksByGenre(String genre) {
+        return bookRepository.findByGenre(genre);
+    }
+
+    public List<Book> getBooksByGenre(String genre, int page) {
+        return getBooksByGenre(genre, page, DEFAULT_PAGE_SIZE);
+    }
+
+    public List<Book> getBooksByGenre(String genre, int page, int noItems) {
+        Pageable pageable = PageRequest.of(page, noItems);
+
+        Page<Book> pagedBooks = bookRepository.findByGenre(genre, pageable);
+
+        if(pagedBooks.hasContent()) {
+            return pagedBooks.getContent();
+        }
+        else {
+            return new ArrayList<>();
+        }
+    }
+
+    public List<Book> getBooksByPublishingYear(Integer year) {
+        return bookRepository.findByPublishingYear(year);
+    }
+
+    public List<Book> getBooksByPublishingYear(Integer year, int page) {
+        return getBooksByPublishingYear(year, page, DEFAULT_PAGE_SIZE);
+    }
+
+    public List<Book> getBooksByPublishingYear(Integer year, int page, int noItems) {
+        Pageable pageable = PageRequest.of(page, noItems);
+
+        Page<Book> pagedBooks = bookRepository.findByPublishingYear(year, pageable);
+
+        if(pagedBooks.hasContent()) {
+            return pagedBooks.getContent();
+        }
+        else {
+            return new ArrayList<>();
+        }
+    }
+
+    public List<Book> getBooksByGenreAndPublishingYear(String genre, Integer year) {
+        return bookRepository.findByGenreAndPublishingYear(genre, year);
+    }
+
+    public List<Book> getBooksByGenreAndPublishingYear(String genre, Integer year, int page) {
+        return getBooksByGenreAndPublishingYear(genre, year, page, DEFAULT_PAGE_SIZE);
+    }
+
+    public List<Book> getBooksByGenreAndPublishingYear(String genre, Integer year, int page, int noItems) {
+        Pageable pageable = PageRequest.of(page, noItems);
+
+        Page<Book> pagedBooks = bookRepository.findByGenreAndPublishingYear(genre, year, pageable);
+
+        if(pagedBooks.hasContent()) {
+            return pagedBooks.getContent();
+        }
+        else {
+            return new ArrayList<>();
+        }
+    }
+
     public Optional<Book> getBookByIsbn(String isbn) {
         return bookRepository.findById(isbn);
     }
@@ -64,8 +127,8 @@ public class BookService {
         return bookRepository.findById(id)
                 .map(book -> {
                     book.setTitle(newBook.getTitle());
-                    book.setPublishing_house(newBook.getPublishing_house());
-                    book.setPublishing_year(newBook.getPublishing_year());
+                    book.setPublishingHouse(newBook.getPublishingHouse());
+                    book.setPublishingYear(newBook.getPublishingYear());
                     book.setGenre(newBook.getGenre());
 
                     return bookRepository.save(book);

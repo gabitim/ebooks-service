@@ -19,21 +19,21 @@ public class Book {
     private String title;
 
     @Column(name = "publishing_house", nullable = false)
-    private String publishing_house;
+    private String publishingHouse;
 
     @Column(name = "publishing_year", nullable = false)
-    private Integer publishing_year;
+    private Integer publishingYear;
 
     @Column(name = "genre", nullable = false)
     private String genre;
 
     public Book() {}
 
-    public Book(String isbn, String title, String publishing_house, Integer publishing_year, String genre ) {
+    public Book(String isbn, String title, String publishingHouse, Integer publishingYear, String genre ) {
         this.isbn = isbn;
         this.title = title;
-        this.publishing_house = publishing_house;
-        this.publishing_year = publishing_year;
+        this.publishingHouse = publishingHouse;
+        this.publishingYear = publishingYear;
         this.genre = genre;
     }
 
@@ -53,20 +53,20 @@ public class Book {
         this.title = title;
     }
 
-    public String getPublishing_house() {
-        return publishing_house;
+    public String getPublishingHouse() {
+        return publishingHouse;
     }
 
-    public void setPublishing_house(String publishing_house) {
-        this.publishing_house = publishing_house;
+    public void setPublishingHouse(String publishingHouse) {
+        this.publishingHouse = publishingHouse;
     }
 
-    public Integer getPublishing_year() {
-        return publishing_year;
+    public Integer getPublishingYear() {
+        return publishingYear;
     }
 
-    public void setPublishing_year(Integer publishing_year) {
-        this.publishing_year = publishing_year;
+    public void setPublishingYear(Integer publishingYear) {
+        this.publishingYear = publishingYear;
     }
 
     public String getGenre() {
@@ -84,14 +84,14 @@ public class Book {
         Book book = (Book) o;
         return Objects.equals(isbn, book.isbn) &&
                 Objects.equals(title, book.title) &&
-                Objects.equals(publishing_house, book.publishing_house) &&
-                Objects.equals(publishing_year, book.publishing_year) &&
+                Objects.equals(publishingHouse, book.publishingHouse) &&
+                Objects.equals(publishingYear, book.publishingYear) &&
                 Objects.equals(genre, book.genre);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(isbn, title, publishing_house, publishing_year, genre);
+        return Objects.hash(isbn, title, publishingHouse, publishingYear, genre);
     }
 
     @Override
@@ -99,8 +99,8 @@ public class Book {
         return "Book{" +
                 "isbn='" + isbn + '\'' +
                 ", title='" + title + '\'' +
-                ", publishingHouse='" + publishing_house + '\'' +
-                ", publishingYear=" + publishing_year +
+                ", publishingHouse='" + publishingHouse + '\'' +
+                ", publishingYear=" + publishingYear +
                 ", genre='" + genre + '\'' +
                 '}';
     }
